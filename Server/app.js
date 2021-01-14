@@ -201,11 +201,12 @@ app.delete('/customer', (req, res) => {
       })
 
    // Work Order Transactions 
-   app.put('/assigntech', (req, res) => {
+   app.put('/checkInTech', (req, res) => {
       
    
-    db_model.assignTech(req.body)
+    db_model.checkInTech(req.body)
     .then(response => {
+      console.log(req.body)
       res.status(200).send(response);
     })
     .catch(error => {

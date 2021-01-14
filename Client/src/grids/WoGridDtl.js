@@ -131,7 +131,7 @@ class Wogriddtl extends Component {
         return (
             <React.Fragment> 
                     <div className = "col-6 mt-2">
-                        <h4>Work Order Details</h4>
+                        <h4>Work Order Service Details</h4>
                 </div> 
                 <div style={{height: 200, width: '100%'}} className="ag-theme-fresh">
                         

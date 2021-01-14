@@ -235,16 +235,31 @@ const deleteWorkorder = (body) => {
 }
 
 // Assign Technican to Work Order 
-const assignTech = (body) => {
+const checkInTech = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
     const values  =  [body.worderid, body.techid,  body.tech_firstname,  body.tech_lastname]
-    pool.query(`UPDATE worder  SET techid= $2, tech_firstname = $3, tech_lastname = $4, status = 'Work in Progress' WHERE worderid = $1`, values ,  (error, results) => {
+    pool.query(`UPDATE worder  SET techid= $2, tech_firstname = $3, tech_lastname = $4,  tech_datetime_in = NOW(),  status = 'Work in Progress' WHERE worderid = $1`, values ,  (error, results) => {
 
       if (error) {
         reject(error)
       }
       resolve(`Work Order  ${body.worderid} has been edited`)
+    })
+  })
+}
+
+
+const checkOutTech = (body) => {
+  return new Promise(function(resolve, reject) {
+    /*  need to specify values on the pool query */
+    const values  =  [body.worderid, body.tech_comment, body.status]
+    pool.query(`UPDATE worder  SET tech_datetime_out = NOW(), tech_comment = $2, status = $3 WHERE worderid = $1`, values ,  (error, results) => {
+
+      if (error) {
+        reject(error)
+      }
+      resolve(`Work Order  ${body.worderid} technician is now checked out and Work Order marked as Complete`)
     })
   })
 }
@@ -351,7 +366,8 @@ const deleteWorkorderDtl = (body) => {
     getWorkorders,
     createWorkorder,
     editWorkorder,
-    assignTech,
+    checkInTech,
+    checkOutTech,
     reassignTech,
     completeWorkorder,
     deleteWorkorder,

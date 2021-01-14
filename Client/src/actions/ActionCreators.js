@@ -440,9 +440,9 @@ export const fetchWorkorder = () => dispatch => {
 
 // ASSIGN TECHNICIAN 
 
-export const assignTech = (worderid, techid, tech_firstname, tech_lastname) => dispatch  => {
+export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => dispatch  => {
    
-    return fetch( serverUrl + '/assigntech',
+    return fetch( serverUrl + '/checkinTech',
                 {
                     method: "PUT",
                     headers:{
@@ -458,7 +458,7 @@ export const assignTech = (worderid, techid, tech_firstname, tech_lastname) => d
                     dispatch(fetchWorkorder());
                 })
                 .catch(error => {
-                    alert('Assign to tech Work Order error' + error)
+                    alert('Assign to tech Work Order Error' + error)
                 })
  }
 
