@@ -10,8 +10,8 @@ class Wogrid extends Component {
            super(props);
            this.state = {
                columnDefs:[
-                   {headerName: 'WO #', field: 'workorderNum', maxWidth: 100, sortable: true, filter:true},
-                   {headerName: 'Promised Date', field: 'promiseDate', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'WO #', field: 'worderid', maxWidth: 100, sortable: true, filter:true},
+                   {headerName: 'Promised Date', field: 'promised_date', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Brand', field: 'brand', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Model', field: 'model', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Amount', field: 'amount'},
@@ -30,7 +30,7 @@ class Wogrid extends Component {
                 
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                  rowSelection="single"
-                                 rowData = {this.state.rowData}
+                                 rowData = {this.props.workorders}
                         
                     />
               

@@ -178,6 +178,46 @@ const deleteTech = (body) => {
 }
 
 // WORK ORDER  
+
+
+const getWorkordersdue = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query(`select * from worder where worder.status = 'Work in Progress' and 
+                worder.promised_date < CURRENT_DATE`, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+     
+      resolve(results.rows);
+    })
+  }) 
+}
+
+const getWorkorderstoday = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query(`select * from worder where worder.status = 'Work in Progress' and 
+                worder.promised_date = CURRENT_DATE`, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+     
+      resolve(results.rows);
+    })
+  }) 
+}
+
+const getWorkorderCust = (custid) => {
+  const value = parseInt(custid)
+  return new Promise(function(resolve, reject) {
+    pool.query(`select * from worder where worder.custid = $1`, [value], (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
 const getWorkorders = () => {
   return new Promise(function(resolve, reject) {
     pool.query('SELECT * FROM worder ORDER BY worderid DESC', (error, results) => {
@@ -234,6 +274,22 @@ const deleteWorkorder = (body) => {
   })
 }
 
+
+
+const gettechload = () => {
+  return new Promise(function(resolve, reject) {
+    pool.query(`SELECT  COUNT(techid) AS counter, techid, tech_firstname, tech_lastname  from worder WHERE worder.status = 'Work in Progress' GROUP BY techid, tech_firstname, tech_lastname `, (error, results) => {
+      if (error) {
+        reject(error)
+      }
+     
+      resolve(results.rows);
+    })
+  }) 
+}
+
+
+
 // Assign Technican to Work Order 
 const checkInTech = (body) => {
   return new Promise(function(resolve, reject) {
@@ -248,7 +304,6 @@ const checkInTech = (body) => {
     })
   })
 }
-
 
 const checkOutTech = (body) => {
   return new Promise(function(resolve, reject) {
@@ -361,6 +416,7 @@ const deleteWorkorderDtl = (body) => {
     deleteService,
     createTech,
     getTech,
+    gettechload,
     editTech,
     deleteTech,
     getWorkorders,
@@ -372,6 +428,9 @@ const deleteWorkorderDtl = (body) => {
     completeWorkorder,
     deleteWorkorder,
     getWorkorderDtl,
+    getWorkordersdue,
+    getWorkorderstoday,
+    getWorkorderCust,
     createWorkorderDtl,
     editWorkorderDtl,
     deleteWorkorderDtl

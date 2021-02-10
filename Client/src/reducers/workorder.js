@@ -1,7 +1,10 @@
 import * as ActionTypes from '../actions/ActionTypes';
 
 const initialState = {
-    workorder: []
+    workorder: [],
+    worderdue: [],
+    wordertoday: [],
+    custworkorder: []
 }
 
 const WorkOrderReducer = (state = initialState, action) => {
@@ -11,12 +14,31 @@ const WorkOrderReducer = (state = initialState, action) => {
                 ...state,
                 workorder: action.payload
             }
+
+        case ActionTypes.FETCH_DUE_WORKORDER:
+            return{
+                ...state,
+                worderdue: action.payload
+            } 
+            
+        case ActionTypes.FETCH_CUSTOMER_WORKORDER:
+            return {
+                ...state, 
+                custworkorder:  action.payload
+            }         
+        
+        case ActionTypes.FETCH_TODAY_WORKORDER:
+            return{
+                ...state,
+                wordertoday: action.payload
+            }    
         
         case ActionTypes.ADD_WORKORDER:
             return {
                 ...state, 
                 workorder: action.payload
             }    
+            
         case ActionTypes.EDIT_WORKORDER:
             return {
                 ...state,

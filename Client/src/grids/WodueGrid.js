@@ -8,10 +8,16 @@ class Wodue extends Component {
            super(props);
            this.state = {
                columnDefs:[
-                   {headerName: 'WO #', field: 'workorderNum', maxWidth: 100, sortable: true, filter:true},
-                   {headerName: 'Promise Date', field: 'promiseDate', maxWidth: 150, sortable: true, filter:true},
-                   {headerName: 'First Name', field: 'firstName', maxWidth: 150, sortable: true, filter:true},
-                   {headerName: 'Last Name', field: 'lastName', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'WO #', field: 'worderid', maxWidth: 100, sortable: true, filter:true},
+
+
+                   {headerName: 'Promised Date', field: 'promised_date', 
+                    cellRenderer: (data) => {
+                     return data.value ? (new Date(data.value)).toDateString() : '';
+                     }},
+                  
+                   {headerName: 'First Name', field: 'cust_firstname', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'Last Name', field: 'cust_lastname', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Mobile', field: 'mobile'}
           
                ],
@@ -26,7 +32,7 @@ class Wodue extends Component {
                 <hr/>   
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                   rowSelection="single"
-                                 rowData = {this.state.rowData}
+                                  rowData = {this.props.workorders}
                         
                     />
                 <hr/>

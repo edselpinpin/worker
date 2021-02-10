@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Control, LocalForm, Errors} from 'react-redux-form';
 
 import { Row, Col, Label, Button } from 'reactstrap';
 import Select from 'react-select';
+import DatePicker from 'react-datepicker';
 
 
 
@@ -28,6 +29,7 @@ class WoformAdd extends Component {
                 brand:  '',
                 inst: '',
                 promised_date: '',
+                currenDate:  new Date(),
               
                 
                 
@@ -160,13 +162,18 @@ render()
                                      </Col>
                             </Row>
 
-                            <Row className = "form-group">                               
+                            <Row className = "form-group"> 
+                               
                                <Label htmlFor="promised_date" md={3}>Promise Date</Label>
                                      <Col md={8}>
-                                      
+                                    
+ 
+                                     
+                                    
+                                                                                  
                                        
                                          <Control.text  model =".promised_date" id="promised_date" name="promised_date"
-                                                       placeholder="YYYY-DD-MM"
+                                                       placeholder="YYYY-MM-DD"
                                                        className="form-control"
                                                    
                                                        validators={
@@ -189,8 +196,10 @@ render()
                                          />  
                                                            
                                      </Col>
+                      
                             </Row>
 
+                           
                             <Row className = "form-group">                               
                                <Label htmlFor="inst" md={3}>Description</Label>
                                      <Col md={8}>

@@ -12,6 +12,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.listen(port, () => {
+  console.log(`App running on port ${port}.`)
+})
+
 // CUSTOMER 
 app.get('/customer', (req, res) => {
   db_model.getCustomers()
@@ -148,11 +152,41 @@ app.delete('/customer', (req, res) => {
       })
     })
 
-    app.listen(port, () => {
-      console.log(`App running on port ${port}.`)
-    })
+    
 
     /* Work Order */
+
+
+    app.get('/workorderdue', (req, res) => {
+      db_model.getWorkordersdue()
+      .then(response => {
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      })
+    })
+
+    app.get('/workordertoday', (req, res) => {
+      db_model.getWorkorderstoday()
+      .then(response => {
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      })
+    })
+
+    app.get('/workordercust/:custid', (req, res) => {
+      db_model.getWorkorderCust(req.params.custid)
+      .then(response => {
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        res.status(500).send(error);
+      })
+    })
+
 
     app.get('/workorder', (req, res) => {
       db_model.getWorkorders()
@@ -201,6 +235,19 @@ app.delete('/customer', (req, res) => {
       })
 
    // Work Order Transactions 
+
+   app.get('/techload', (req, res) => {
+    db_model.gettechload()
+    .then(response => {
+      res.status(200).send(response);
+      
+    })
+    .catch(error => {
+      res.status(500).send(error);
+    })
+  })
+
+
    app.put('/checkInTech', (req, res) => {
       
    
@@ -214,6 +261,19 @@ app.delete('/customer', (req, res) => {
       res.status(500).send(error);
     })
   })  
+
+  app.put('/checkOutTech', (req, res) => {
+    db_model.checkOutTech(req.body)
+    .then(response => {
+      console.log(req.body)
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).send(error);
+    })
+  })  
+
   
   app.put('/reassigntech', (req, res) => {
       
@@ -247,8 +307,6 @@ app.delete('/customer', (req, res) => {
     db_model.getWorkorderDtl(req.params.id)
     
     .then(response => {
-      console.log(req.params.id)
-     
       res.status(200).send(response);
     })
     .catch(error => {

@@ -5,7 +5,7 @@ import { LocalForm, actions} from 'react-redux-form';
 import { Modal, ModalBody, ModalHeader, Row, Col, Button } from 'reactstrap';
 
 import { connect } from "react-redux";
-import { fetchCustomer, addCustomer, editCustomer, deleteCustomer } from '../actions/ActionCreators';
+import { fetchCustomer, addCustomer, editCustomer, deleteCustomer, fetchCustWorkorder } from '../actions/ActionCreators';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-fresh.css';
 import CustformAdd  from '../forms/CustBodyAdd';
@@ -41,7 +41,9 @@ const mapDispatchToProps = {
     addCustomer:(firstname,lastname,street,city,state,zip,mobile,email)  => (addCustomer(firstname,lastname,street,city,state,zip,mobile,email)),
     editCustomer:(custid,firstname,lastname,street,city,state,zip,mobile,email) => (editCustomer(custid,firstname,lastname,street,city,state,zip,mobile,email)),
     deleteCustomer:(custid) => (deleteCustomer(custid)),
-    resetCustomerForm: () => (actions.reset('customerForm'))
+    resetCustomerForm: () => (actions.reset('customerForm')),
+    fetchCustWorkorder:(custid) => (fetchCustWorkorder(custid))
+
     
   }
      
@@ -180,7 +182,7 @@ const mapDispatchToProps = {
                   
              }),
          });  
-         console.log(this.state.selectedRow.firstName)   
+           this.props.fetchCustWorkorder(this.state.selectedRow.custid);
     });
 
    }
@@ -234,6 +236,7 @@ const mapDispatchToProps = {
                                     rowData={this.props.customer.customer}
                                     rowSelection="single"
                                     onGridReady={params => this.gridApi = params.api}
+                                    onRowSelected = {this.updateSelectedRow} 
                                  
                                 
                         />
@@ -280,8 +283,8 @@ const mapDispatchToProps = {
                    <ModalHeader toggle={this.toggleModalEdit}>Edit Customer</ModalHeader>
                     <ModalBody>
                         <CustformEdit  editCustomer={this.props.editCustomer}
-                                      toggleModalEdit = {this.toggleModalEdit}
-                                      selectedRow = {this.state.selectedRow}/>
+                                       toggleModalEdit = {this.toggleModalEdit}
+                                       selectedRow = {this.state.selectedRow}/>
                     </ModalBody>
                 </Modal>
 

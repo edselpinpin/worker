@@ -9,9 +9,9 @@ class Techload extends Component {
            this.state = {
                columnDefs:[
                    {headerName: 'TechID', field: 'techid', maxWidth: 100, sortable: true, filter:true},
-                   {headerName: 'First Name', field: 'firstName', maxWidth: 150, sortable: true, filter:true},
-                   {headerName: 'Last Name', field: 'lastName', maxWidth: 150, sortable: true, filter:true},
-                   {headerName: 'Count', field: 'woCount'}
+                   {headerName: 'First Name', field: 'tech_firstname', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'Last Name', field: 'tech_lastname', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'Count', field: 'counter', maxWidth: 250}
                ],
                rowData: []
            }
@@ -24,7 +24,7 @@ class Techload extends Component {
                 <hr/>   
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                   rowSelection="single"
-                                 rowData = {this.state.rowData}
+                                  rowData = {this.props.techload}
                         
                     />
                 <hr/>

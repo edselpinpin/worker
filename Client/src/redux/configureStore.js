@@ -19,9 +19,13 @@ export const ConfigureStore = () => {
             service:  ServiceReducer,
             Auth:     AuthReducer,    
             tech:     TechReducer,
+            techload: TechReducer,
             workorder: WorkOrderReducer,
+            worderdue: WorkOrderReducer,
+            wordertoday: WorkOrderReducer,
             workorderdtl: WorkOrderDtlReducer,
             workoderparts: WorkOrderPartsReducer,
+            custworkorder: WorkOrderReducer,
             ...createForms({
                 customerForm: InitialCustommer
             })    

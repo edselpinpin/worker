@@ -217,6 +217,36 @@ export const addService = (servicename, servicedescription, price) => dispatch  
   
 
   // TECHNICIANS 
+
+
+  export const fetchTechLoad = () => dispatch => {
+    return fetch(serverUrl + '/techload',
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    }
+                })
+               .then(response => {
+                
+                  return response
+                 
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildtechload(data)))
+                .catch(error => console.log(`Tech Load Fetch Error ${error}`))
+            }   
+
+export const buildtechload = (techlist) => {
+    return {
+            type: ActionTypes.FETCH_TECH_LOAD,
+            payload: techlist
+    }
+    
+}           
+
+
 export const fetchTech= () => dispatch => {
     return fetch(serverUrl + '/tech',
                 {
@@ -337,6 +367,98 @@ export const remove_db_profile = () => {
 
 // WORK ORDER 
 
+export const fetchdDueWorkorder = () => dispatch => {
+    return fetch( serverUrl + '/workorderdue',
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    }
+                })
+               .then(response => {
+
+                   console.log(response)
+                  return response
+
+                })
+                .then(response => response.json())
+                .then(data => dispatch(builddueworkorder(data)))
+                .catch(error => console.log(`Work Order due fetch error ${error}`))
+};
+
+export const builddueworkorder = workorder => {
+    
+    return {
+         type: ActionTypes.FETCH_DUE_WORKORDER,
+         payload: workorder 
+    }
+    
+}
+
+export const fetchCustWorkorder = (custid) => dispatch => {
+    return fetch( serverUrl + `/workordercust/${custid}`,
+   
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    },
+                   
+                })
+               .then(response => {
+
+                   console.log(response)
+                  return response
+
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildCustworkorder(data)))
+                .catch(error => console.log(`Customer Work Order fetch error ${error}`))
+};
+
+export const buildCustworkorder = workorder => {
+    
+    return {
+         type: ActionTypes.FETCH_CUSTOMER_WORKORDER,
+         payload: workorder 
+    }
+    
+}
+
+
+
+export const fetchdTodayWorkorder = () => dispatch => {
+    return fetch( serverUrl + '/workordertoday',
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    }
+                })
+               .then(response => {
+
+                   console.log(response)
+                  return response
+
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildtodayworkorder(data)))
+                .catch(error => console.log(`Work Order due fetch error ${error}`))
+};
+
+export const buildtodayworkorder = workorder => {
+    
+    return {
+         type: ActionTypes.FETCH_TODAY_WORKORDER,
+         payload: workorder 
+    }
+    
+}
+
+
 export const fetchWorkorder = () => dispatch => {
     return fetch( serverUrl + '/workorder',
                 {
@@ -442,7 +564,7 @@ export const fetchWorkorder = () => dispatch => {
 
 export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => dispatch  => {
    
-    return fetch( serverUrl + '/checkinTech',
+    return fetch( serverUrl + '/checkInTech',
                 {
                     method: "PUT",
                     headers:{
@@ -458,9 +580,32 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
                     dispatch(fetchWorkorder());
                 })
                 .catch(error => {
-                    alert('Assign to tech Work Order Error' + error)
+                    alert('Check-in Technician to Work Order Error' + error)
                 })
  }
+
+ export const checkOutTech = (worderid, tech_comment, status) => dispatch  => {
+   
+    return fetch( serverUrl + '/checkoutTech',
+                {
+                    method: "PUT",
+                    headers:{
+                        "Content-type" : "application/json",
+                    },
+                    body: JSON.stringify({worderid, tech_comment, status}),
+                })
+               .then(response => {
+                  return response.text()
+                })
+                .then(data => {
+                    alert(data);
+                    dispatch(fetchWorkorder());
+                })
+                .catch(error => {
+                    alert('Check-out technician to Work Order Error' + error)
+                })
+ }
+
 
 // RE-ASSIGN TECHNICIAN 
  export const reassignTech = (worderid) => dispatch  => {

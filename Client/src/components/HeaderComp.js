@@ -65,11 +65,13 @@ class Header extends Component {
                             </NavLink>
                             
                         </NavItem>
+                        {/*
                         <NavItem>
                             <NavLink className="nav-link" to="/invoice">
                                 <FaIcons.FaFileInvoice /> Invoice
                             </NavLink>
                         </NavItem>
+                        */}
                         <NavItem>
                             <NavLink className="nav-link" to="/customer">
                                 <BsIcons.BsPeopleFill /> Customer

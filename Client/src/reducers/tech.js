@@ -1,7 +1,8 @@
 import * as ActionTypes from '../actions/ActionTypes';
 
 const initialState = {
-    tech: []
+    tech: [],
+    techload: []
 }
 
 const TechReducer = (state = initialState, action) => {
@@ -16,6 +17,12 @@ const TechReducer = (state = initialState, action) => {
                 ...state, 
                 tech: []
             }  
+
+        case ActionTypes.FETCH_TECH_LOAD:
+            return {
+                ...state, 
+                techload: action.payload
+            }      
         case ActionTypes.ADD_TECH:
             return {
                 ...state, 
@@ -37,9 +44,8 @@ const TechReducer = (state = initialState, action) => {
             return {
                 ...state, 
                 tech: action.payload
-            }       
+            }   
 
-          
         default:
             return state      
     }
