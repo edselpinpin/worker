@@ -1,7 +1,7 @@
 import * as ActionTypes from '../actions/ActionTypes';
 
 const initialState = {
-    workorder_parts: []
+    workoderparts: []
 }
 
 const WorkOrderPartsReducer = (state = initialState, action) => {
@@ -9,24 +9,24 @@ const WorkOrderPartsReducer = (state = initialState, action) => {
         case ActionTypes.FETCH_WORKORDER_PARTS:
             return{
                 ...state,
-                workorder_parts: action.payload
+                workoderparts: action.payload
             }
         
         case ActionTypes.ADD_WORKORDER_PARTS:
             return {
                 ...state, 
-                workorder_parts: action.payload
+                workorderparts: action.payload
             }    
         case ActionTypes.EDIT_WORKORDER_PART:
             return {
                 ...state,
-                workorder_parts: null
+                workorderparts: null
             }   
             
         case ActionTypes.DELETE_WORKORDER_PARTS:
             return {
                 ...state, 
-                workorder_parts: null
+                workorderparts: null
             }   
 
         default:

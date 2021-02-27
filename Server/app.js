@@ -58,6 +58,7 @@ app.delete('/customer', (req, res) => {
     })
     .catch(error => {
       res.status(500).send(error);
+      console.log(error);
     })
   })
   
@@ -213,14 +214,18 @@ app.delete('/customer', (req, res) => {
     })
     
     app.put('/workorder', (req, res) => {
-      
-     
+      console.log(req.body)
       db_model.editWorkorder(req.body)
+     
       .then(response => {
+        
+        
         res.status(200).send(response);
+        
       })
       .catch(error => {
         res.status(500).send(error);
+        console.log(error)
       })
     })
     
@@ -265,11 +270,11 @@ app.delete('/customer', (req, res) => {
   app.put('/checkOutTech', (req, res) => {
     db_model.checkOutTech(req.body)
     .then(response => {
-      console.log(req.body)
+     
       res.status(200).send(response);
     })
     .catch(error => {
-      console.log(error)
+    
       res.status(500).send(error);
     })
   })  
@@ -301,9 +306,25 @@ app.delete('/customer', (req, res) => {
     })
   })
 
+  
+
+  app.put('/close', (req, res) => {
+      
+    
+    db_model.closeWorkorder(req.body)
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).send(error);
+    })
+  })
+
   // Work Order Detail 
 
   app.get('/workorderdtl/:id', (req, res) => {
+   
     db_model.getWorkorderDtl(req.params.id)
     
     .then(response => {
@@ -320,6 +341,7 @@ app.delete('/customer', (req, res) => {
     console.log(req.body)
     db_model.createWorkorderDtl(req.body)
     .then(response => {
+     
       res.status(200).send(response);
     })
     .catch(error => {
@@ -341,14 +363,79 @@ app.delete('/customer', (req, res) => {
   })
   
   app.delete('/workorderdtl', (req, res) => {
+    console.log(req.body)
     db_model.deleteWorkorderDtl(req.body)
       .then(response => {
+        console.log(req.body)
         res.status(200).send(response);
       })
       .catch(error => {
+        
+        console.log(error)
+        res.status(500).send(error);
+
+      })
+    })
+
+    // Work Detail Parts Materials 
+
+    app.get('/workorderdtlparts/:id', (req, res) => {
+      console.log(req.params.id)
+      db_model.getWorkorderDtlParts(req.params.id)
+       
+      .then(response => {
+        
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        console.log(error)
         res.status(500).send(error);
       })
     })
+
+    app.post('/workorderdtlparts', (req, res) => {
+   
+      console.log(req.body)
+      db_model.createWorkorderDtlParts(req.body)
+      .then(response => {
+       
+        res.status(200).send(response);
+      })
+      .catch(error => {
+       
+        res.status(500).send(error);
+      })
+    })
+    
+    app.put('/workorderdtlparts', (req, res) => {
+      console.log("edit parts")
+      console.log(req.body)
+      db_model.editWorkorderDtlParts(req.body)
+      .then(response => {
+        
+        res.status(200).send(response);
+      })
+      .catch(error => {
+        console.log(error)
+        res.status(500).send(error);
+      })
+    })
+    
+    app.delete('/workorderdtlparts', (req, res) => {
+      console.log(req.body)
+      db_model.deleteWorkorderDtlParts(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+          console.log(error)
+         
+          res.status(500).send(error);
+  
+        })
+      })
+  
+    
 
 
 

@@ -39,8 +39,6 @@ handleSubmitEdit(values) {
                           values.servicename, 
                           values.servicedescription, 
                           values.price); 
-                          
-                          
      this.props.toggleModalEdit();                      
 }
         

@@ -12,7 +12,7 @@ class WoTechCheckIn extends Component {
         super(props); {
             this.state = 
             {
-                worderid: this.props.currworderid,
+                worderid: this.props.selectedWORow.worderid,
                 techid: '',
                 tech_firstname:  '',
                 tech_lastname: '',
@@ -32,8 +32,8 @@ setLocalState(value){
     selTech.forEach(el =>{
           this.setState({
                     techid: el.techid,
-                    tech_firstname: el.firstname,
-                    tech_lastname: el.lastname,
+                    tech_firstname: el.tech_firstname,
+                    tech_lastname: el.tech_lastname,
                    
           })
 
@@ -41,21 +41,20 @@ setLocalState(value){
 }
 
 handleSubmitAdd(values) {
-
+    
     this.props.checkInTech(this.state.worderid,
                            this.state.techid, 
-                           this.state.tech_firstname,
-                           this.state.tech_lastname 
+                           'Work in Progress'
                            );  
-     this.props.toggleModalCheckInTech();    
-               
+                          
+     this.props.toggleModalCheckInTech(); 
+    
 }
 
 componentDidMount() {
-    console.log()
-   
+    
    listItems =  this.props.tech.tech.map(opt =>({
-       label: opt.techid + '   ' + opt.firstname + '' + opt.lastname , value: opt.techid
+       label: opt.techid + '   ' + opt.tech_firstname + '' + opt.tech_lastname , value: opt.techid
    }))
 }
     

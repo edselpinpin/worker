@@ -6,12 +6,13 @@ import { connect } from "react-redux";
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-fresh.css';
 import  Wogriddtl  from '../grids/WoGridDtl';
-import { addWorkorder, editWorkorder, deleteWorkorder, fetchWorkorder, fetchWorkorderDtl, checkInTech, checkOutTech} from '../actions/ActionCreators';
+import  WogriddtlParts from '../grids/WoGridDtlPrt';
+import { addWorkorder, editWorkorder, deleteWorkorder, fetchWorkorder, fetchWorkorderDtl, checkInTech, checkOutTech, closeWorkorder,fetchWorkorderDtlParts} from '../actions/ActionCreators';
 import WoformAdd  from '../forms/WoBodyAdd';
 import WoTechCheckIn from '../forms/WoTechCheckIn';
 import WoTechCheckOut from '../forms/WoTechCheckOut';
-//import WoformEdit from '../forms/WoBodyEdit';
-//import WoformView from '../forms/WoBodyView';
+import WoformEdit from '../forms/WoBodyEdit';
+import WoformView from '../forms/WoBodyView';
 import * as GrIcons from 'react-icons/gr';
 import * as FiIcons from 'react-icons/fi';
 import * as RiIcons from 'react-icons/ri';
@@ -39,11 +40,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   
     fetchWorkorderDtl:(worderid) => (fetchWorkorderDtl(worderid)),
+    fetchWorkorderDtlParts:(worderid) => (fetchWorkorderDtlParts(worderid)),
     addWorkorder:(custid, cust_firstname, cust_lastname, brand, model, promised_date, inst, status)  => (addWorkorder(custid, cust_firstname, cust_lastname, brand, model, promised_date, inst, status)),
-    editWorkorder:(worderid, custid, cust_firstname, cust_lastname, brand, model, promised_date, inst) => (editWorkorder(worderid, custid, cust_firstname, cust_lastname, brand, model, promised_date, inst)),
+    editWorkorder:(worderid, custid, brand, model, promised_date, inst) => (editWorkorder(worderid, custid, brand, model, promised_date, inst)),
     deleteWorkorder:(worderid) => (deleteWorkorder(worderid)),
-    checkInTech:(worderid, techId, tech_firstname, tech_lastname, tech_datetime_in, status) => (checkInTech(worderid, techId, tech_firstname, tech_lastname, tech_datetime_in, status)),
-    checkOutTech:(worderid, techId, tech_firstname, tech_lastname, tech_datetime_out, status) => (checkOutTech(worderid, techId, tech_firstname, tech_lastname, tech_datetime_out, status)),   
+    checkInTech:(worderid, techId, status) => (checkInTech(worderid, techId, status)),
+    checkOutTech:(worderid, techId, tech_firstname, tech_lastname, tech_datetime_out, status) => (checkOutTech(worderid, techId, tech_firstname, tech_lastname, tech_datetime_out, status)), 
+    closeWorkorder:(worderid) => (closeWorkorder(worderid)),
 }
 
   
@@ -53,11 +56,11 @@ class Wogridlist extends Component {
            super(props);
            this.state = {
                columnDefs:[
-                   {headerName: 'Status', field: 'status', maxWidth: 170, sortable: true, checkboxSelection: true},
-                   {headerName: 'WO #', field: 'worderid', maxWidth: 100, sortable: true, filter:true,selectable: false},
-                   {headerName: 'CustID #', field: 'custid', maxWidth: 100, sortable: true, filter:true},
-                   {headerName: 'First Name', field: 'cust_firstname', maxWidth: 150, sortable: true, filter:true},
-                   {headerName: 'Last Name', field: 'cust_lastname', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'Status', field: 'status', maxWidth: 170, sortable: true, checkboxSelection: true, pinned: 'left'},
+                   {headerName: 'WO #', field: 'worderid', maxWidth: 100, sortable: true, filter:true,selectable: false, pinned: 'left'},
+                   {headerName: 'CustID #', field: 'custid', maxWidth: 100, sortable: true, filter:true, pinned: 'left'},
+                   {headerName: 'First Name', field: 'cust_firstname', maxWidth: 150, sortable: true, filter:true, pinned: 'left'},
+                   {headerName: 'Last Name', field: 'cust_lastname', maxWidth: 150, sortable: true, filter:true,pinned: 'left'},
                    {headerName: 'Brand', field: 'brand', maxWidth: 100},
                    {headerName: 'Model', field: 'model', maxWidth: 100},
                    {headerName: 'Promised Date', field: 'promised_date', 
@@ -73,21 +76,30 @@ class Wogridlist extends Component {
                    
                    maxWidth: 200, sortable: true, filter:true},
                   // {headerName: 'Inst', field: 'inst', maxWidth: 500},
+                
                    {headerName: 'TechID', field: 'techid', maxWidth: 85, sortable: true, filter:true},
                    {headerName: 'First Name', field: 'tech_firstname', maxWidth: 150, sortable: true},
                    {headerName: 'Last Name', field: 'tech_lastname', maxWidth: 150, sortable: true},
+                   
                    {headerName: 'DateTime-In', field: 'tech_datetime_in', maxWidth: 250,
                       cellRenderer: (data) => {
-                          return  data.value ? (new Date(data.value)).toUTCString() : '';
-                             }
+                              return  data.value ? (new Date(data.value)).toUTCString() : '';
+                            } 
+                             
                     },
                                       
-                   {headerName: 'DateTime-Out', field: 'tech_datetime_out',maxWidth: 250,
-                   cellRenderer: (data) => {
-                         return  data.value ? (new Date(data.value)).toUTCString() : '';
-                   },
-                }
-               
+                    {headerName: 'DateTime-Out', field: 'tech_datetime_out',maxWidth: 250,
+                        cellRenderer: (data) => {
+                              return  data.value ? (new Date(data.value)).toUTCString() : '';
+                        }
+                    },
+                  
+                    {headerName: 'Amount', field: 'amount',maxWidth: 250,
+                    valueFormatter: params => params.data.amount.toFixed(2),
+                    },
+                  
+                   
+                   
                ],
 
                selectedRow:{
@@ -115,6 +127,7 @@ class Wogridlist extends Component {
            this.toggleModalEdit = this.toggleModalEdit.bind(this);
            this.toggleModalCheckInTech = this.toggleModalCheckInTech.bind(this);
            this.toggleModalCheckOutTech = this.toggleModalCheckOutTech.bind(this);
+           this.toggleModalCloseWo = this.toggleModalCloseWo.bind(this);
            this.updateSelectedRow = this.updateSelectedRow.bind(this);
          
     }
@@ -125,16 +138,18 @@ class Wogridlist extends Component {
     }
 
     onGridReady = (params) => {
-   
-       
-        //this.api.sizeColumnsToFit();
-        //this.calculateRowCount();
-       // this.gridApi.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true));
+        this.gridApi = params.api   
     };
 
     onRowDataChanged = (params) => {
         this.gridApi = params.api 
-        this.gridApi.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true));
+        this.selectFirstGrid();
+       // this.gridApi.forEachNode(node => node.worderid ? '60' : node.setSelected(true))
+       /*
+        this.gridApi.forEach((node) => {
+            console.log(node.woederid)
+        })
+        */
     }
 
     toggleModalAdd() {
@@ -144,6 +159,12 @@ class Wogridlist extends Component {
         });
        
     }
+
+   selectFirstGrid() {
+    this.gridApi.forEachNode(node => node.rowIndex ? 0 : node.setSelected(true)); 
+   }
+
+  
    
 
    updateSelectedRow() {
@@ -173,7 +194,7 @@ class Wogridlist extends Component {
 
     
     this.props.fetchWorkorderDtl(this.state.selectedRow.worderid);
-    
+    this.props.fetchWorkorderDtlParts(this.state.selectedRow.worderid);
    }
     toggleModalEdit() {
        this.setState({
@@ -205,9 +226,21 @@ class Wogridlist extends Component {
     }
 
     toggleModalCheckInTech() {
-       this.setState({
-           isModalCheckInTech: !this.state.isModalCheckInTech
-       })
+        if (this.state.selectedRow.status === "Open" || 
+            this.state.selectedRow.status === "Complete"  ) {  
+              this.setState({
+              isModalCheckInTech: !this.state.isModalCheckInTech
+
+             })
+
+                     
+                
+             
+            
+        }
+        else {
+            alert('Work Order Status not Open or Complete')   
+        }     
     }
 
     toggleModalCheckOutTech(){
@@ -216,11 +249,37 @@ class Wogridlist extends Component {
                 isModalCheckOutTech: !this.state.isModalCheckOutTech
             })
          }
+         
          else {
              alert('Work Order Status not in Work in Progress')
          }
+         
        
 
+    }
+
+    toggleModalCloseWo() {
+        if (this.state.selectedRow.status === "Complete") {
+            this.setState({
+                isModalWorkOrderClose: !this.state.isModalWorkOrderClose
+            })
+         }
+         else {
+             alert('Work Order Status not Complete')
+         }
+        
+    }
+
+    handleSubmitCloseWorkOrder() {
+    
+        let newCustArr = [];
+        this.props.closeWorkorder(this.state.selectedRow.worderid);
+        newCustArr  =  this.props.customer.customer.filter(customer => customer.custid === this.state.selectedRow.custid);
+        const email  =  newCustArr.map(customer => customer.email);
+    
+       
+
+        this.toggleModalCloseWo();  
     }
 
        render() {
@@ -238,6 +297,7 @@ class Wogridlist extends Component {
                                      onGridReady={this.onGridReady}
                                      onRowSelected = {this.updateSelectedRow} 
                                      onRowDataChanged ={this.onRowDataChanged}
+                                    
                         />
                         </div>
                         <div class = "row mt-1">
@@ -271,12 +331,23 @@ class Wogridlist extends Component {
                                     </Button>{'    '}
 
                                 </div>
+
+                                <div className = "col">
+                                    <Button outline size="md" type="submit" color="dark"
+                                        onClick={this.toggleModalCloseWo}>
+                                    <GrIcons.GrCompliance/> 
+                                    </Button>{'    '}
+
+                                    
+
+                                </div>
+
                         </div>
                     <div>
                 </div>
                
                
-                {/* add CUSTOMER */}
+                {/* add workorder */}
                 <Modal isOpen={this.state.isModalOpenAdd} toggle={this.toggleModalAdd}>
                    <ModalHeader toggle={this.toggleModalAdd}>Add Work Order</ModalHeader>
                     <ModalBody>
@@ -287,20 +358,23 @@ class Wogridlist extends Component {
                     </ModalBody>
                 </Modal>
 
-                 {/* 
+                 {/* Edit work order */}
                  <Modal  isOpen={this.state.isModalOpenEdit} 
                          toggleModalEdit={this.toggleModalEdit}
                          >
                             
                    <ModalHeader toggle={this.toggleModalEdit}>Edit Work Order</ModalHeader>
                     <ModalBody>
-                        <WoformEdit  editCustomer={this.props.editCustomer}
+                        <WoformEdit   editWorkOrder = {this.props.editWorkorder}
                                       toggleModalEdit = {this.toggleModalEdit}
-                                      selectedRow = {this.state.selectedRow}/>
+                                      selectedRow = {this.state.selectedRow}
+                                      customer = {this.props.customer}
+                                      />
                     </ModalBody>
                 </Modal>
 
                 
+                  { /* View work order */}  
                  <Modal  isOpen={this.state.isModalOpenView} 
                          toggleModalEdit={this.toggleModalView}
                          >
@@ -308,11 +382,13 @@ class Wogridlist extends Component {
                    <ModalHeader toggle={this.toggleModalView}>View Work Order</ModalHeader>
                     <ModalBody>
                         <WoformView 
-                                      toggleModalEdit = {this.toggleModalView}
-                                      selectedRow = {this.state.selectedRow}/>
+                                      toggleModalView = {this.toggleModalView}
+                                      selectedRow = {this.state.selectedRow}
+                                      customer = {this.props.customer} 
+                                      />
                     </ModalBody>
                 </Modal>
-                 */}
+                 
                 
                 {/* DELETE CUSTOMER */}
                 <Modal isOpen={this.state.isModalOpenDel} toggle={this.toggleModalDel}>
@@ -333,20 +409,46 @@ class Wogridlist extends Component {
                   </LocalForm>
                 </Modal> 
 
-                {/* check-in technician */}
-                <Modal isOpen={this.state.isModalCheckInTech} toggle={this.toggleModalChecInTech}>
-                   <ModalHeader toggle={this.toggleModalCheckInTech}>Check In Technician</ModalHeader>
+                {/* check-in workorder */}
+                <Modal isOpen={this.state.isModalWorkOrderClose} toggle={this.toggleModalCloseWo}>
+                   <ModalHeader toggle={this.toggleModalCloseWo}>Close Work Order </ModalHeader>
+                   <LocalForm onSubmit={values => this.handleSubmitCloseWorkOrder()}>
                     <ModalBody>
+                      <span>Do you want to close this WorkOrer : {this.state.selectedRow.worderid} ?</span>
+                        
+                        <Row className = "form-group mt-2">
+                            <Col md={{size: 5}}>
+                                <Button outline type="submit" color="dark">
+                                    Yes
+                                </Button>
+                                
+                            </Col>
+                        </Row>
+                         
+                    </ModalBody>
+                    </LocalForm>
+                </Modal>
+
+                 {/* check-in workorder */}
+
+                <Modal isOpen={this.state.isModalCheckInTech} toggle={this.toggleModalCheckInTech}>
+                   <ModalHeader toggle={this.toggleModalCheckInTech}>Check In Work Order</ModalHeader>
+                    <ModalBody>
+                        
                         <WoTechCheckIn 
+                                   tech = {this.props.tech}
                                    checkInTech = {this.props.checkInTech}
                                    toggleModalCheckInTech ={this.toggleModalCheckInTech}  
-                                   tech = {this.props.tech} 
-                                   currworderid ={this.state.selectedRow.worderid} />
+                                   currworderid ={this.state.selectedRow.worderid} 
+                                   selectedWORow = {this.state.selectedRow} 
+                                   workorder = {this.props.workorder.workorder.filter(workorder => workorder.worderid === this.state.selectedRow.worderid)}        />
+                        
                     </ModalBody>
                 </Modal>
 
+                { /* Close out Order */ }
                 <Modal isOpen={this.state.isModalCheckOutTech} toggle={this.toggleModalChecOutTech}>
-                   <ModalHeader toggle={this.toggleModalCheckOutTech}>Check Out Technician</ModalHeader>
+                   <ModalHeader toggle={this.toggleModalCheckOutTech}>Check Out Work Order</ModalHeader>
                     <ModalBody>
                         <WoTechCheckOut 
                                    checkOutTech = {this.props.checkOutTech}
@@ -358,12 +460,18 @@ class Wogridlist extends Component {
                 </Modal>
   
                 <div className = "row">
-                  <div className = "col-12 mt-3">
+                  <div className = "col-6 mt-3">
                       <Wogriddtl
-                          getWOid      = {this.updateSelectedRow}
-                          currworderid ={this.state.selectedRow.worderid}
+                         selectedWORow  = {this.state.selectedRow}
                          />
                  </div>
+                 <div className = "col-6 mt-3">
+                      <WogriddtlParts
+                          selectedWORow  = {this.state.selectedRow}
+                         />
+                 </div>
+
+
                </div>     
 
 

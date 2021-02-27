@@ -55,25 +55,8 @@ setLocalState(value){
 }
 
 handleSubmitAdd(values) {
-
-   this.props.getselectedRow(); // to  get the current selected worderid 
-   
-  // const selService =   this.props.service.service.filter(svc => svc.serviceid ===  currSelectId);  
-   /*
-   selService.forEach(el =>  { 
-        this.props.addWorkorder( '1',
-                                 el.serviceid, 
-                                 el.servicename,
-                                 el.servicedescription, 
-                                 el.price, 
-                              );
-        
-    })
-    */
-    
   
-
-    this.props.addWorkorderDtl(this.props.worderid,
+    this.props.addWorkorderDtl(this.props.selectedWORow.worderid,
                                this.state.serviceid, 
                                this.state.servicename,
                                this.state.servicedescription, 
@@ -84,8 +67,7 @@ handleSubmitAdd(values) {
 }
 
 componentDidMount() {
-    console.log()
-   
+    
    listItems =  this.props.service.service.map(opt =>({
        label: opt.serviceid + '   ' + opt.servicename, value: opt.serviceid
    }))

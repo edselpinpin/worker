@@ -54,9 +54,9 @@ const mapDispatchToProps = {
         this.state = {
             columnDefs: [
                { headerName: 'Customer No', field: 'custid', maxWidth: 100, sortable: true, filter: true, checkboxSelection: true},
-               { headerName: 'First Name', field: 'firstname', maxWidth: 150,sortable: true, filter: true},
-               { headerName: 'Last Name', field: 'lastname', maxWidth: 150, sortable: true, filter: true},
-               { headerName: 'Street', field: 'stree', maxWidth: 150, sortable: true, filter: true},
+               { headerName: 'First Name', field: 'cust_firstname', maxWidth: 150,sortable: true, filter: true},
+               { headerName: 'Last Name', field: 'cust_lastname', maxWidth: 150, sortable: true, filter: true},
+               { headerName: 'Street', field: 'street', maxWidth: 150, sortable: true, filter: true},
                { headerName: 'City', field: 'city', maxWidth: 150, sortable: true, filter: true}, 
                { headerName: 'State', field: 'state', maxWidth: 150, sortable: true, filter: true},
                { headerName: 'Zip', field: 'zip', maxWidth: 150, sortable: true, filter: true},
@@ -171,8 +171,8 @@ const mapDispatchToProps = {
             
              selectedRow: Object.assign({}, this.state.selectedRow, {
                   custid: node.custid,
-                  firstname: node.firstname,
-                  lastname: node.lastname,
+                  firstname: node.cust_firstname,
+                  lastname: node.cust_lastname,
                   street: node.street,
                   city: node.city,
                   state:  node.state,

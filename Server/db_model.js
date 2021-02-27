@@ -26,7 +26,7 @@ const getCustomers = () => {
     return new Promise(function(resolve, reject) {
       /*  need to specify values on the pool query */
       const values  = [body.firstname, body.lastname, body.street, body.city, body.state, body.zip, body.mobile, body.email]
-      pool.query(`INSERT INTO customer (firstname, lastname, street, city, state, zip, mobile, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, values,  (error, results) => {
+      pool.query(`INSERT INTO customer (cust_firstname, cust_lastname, street, city, state, zip, mobile, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, values,  (error, results) => {
 
         if (error) {
           reject(error)
@@ -40,7 +40,7 @@ const getCustomers = () => {
     return new Promise(function(resolve, reject) {
       /*  need to specify values on the pool query */
       const values  = [body.custid, body.firstname, body.lastname, body.street, body.city, body.state, body.zip, body.mobile, body.email]
-      pool.query(`UPDATE customer  SET firstname= $2, lastname = $3, street = $4, city = $5, state = $6, zip = $7, mobile = $8, email = $9 WHERE custid = $1`, values ,  (error, results) => {
+      pool.query(`UPDATE customer  SET cust_firstname= $2, cust_lastname = $3, street = $4, city = $5, state = $6, zip = $7, mobile = $8, email = $9 WHERE custid = $1`, values ,  (error, results) => {
 
         if (error) {
           reject(error)
@@ -86,6 +86,10 @@ const createService = (body) => {
       if (error) {
         reject(error)
       }
+
+     
+
+
       resolve(`A service menu ${body.serviceid} has been added` )
     })
   })
@@ -139,7 +143,7 @@ const createTech = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
     const values  = [body.firstname, body.lastname]
-    pool.query(`INSERT INTO technicians (firstname, lastname) VALUES ($1, $2)`, values,  (error, results) => {
+    pool.query(`INSERT INTO technicians (tech_firstname, tech_lastname) VALUES ($1, $2)`, values,  (error, results) => {
 
       if (error) {
         reject(error)
@@ -153,7 +157,7 @@ const editTech = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
     const values  = [body.techid, body.firstname, body.lastname]
-    pool.query(`UPDATE technicians  SET firstname= $2, lastname = $3  WHERE techid = $1`, values ,  (error, results) => {
+    pool.query(`UPDATE technicians  SET tech_firstname= $2, tech_lastname = $3  WHERE techid = $1`, values ,  (error, results) => {
 
       if (error) {
         reject(error)
@@ -182,8 +186,10 @@ const deleteTech = (body) => {
 
 const getWorkordersdue = () => {
   return new Promise(function(resolve, reject) {
-    pool.query(`select * from worder where worder.status = 'Work in Progress' and 
-                worder.promised_date < CURRENT_DATE`, (error, results) => {
+    pool.query(`select * from worder INNER JOIN customer ON worder.custid = customer.custid 
+                                     LEFT JOIN technicians ON technicians.techid = worder.techid 
+                                     where worder.status = 'Work in Progress' and 
+                                     worder.promised_date < CURRENT_DATE`, (error, results) => {
       if (error) {
         reject(error)
       }
@@ -195,7 +201,9 @@ const getWorkordersdue = () => {
 
 const getWorkorderstoday = () => {
   return new Promise(function(resolve, reject) {
-    pool.query(`select * from worder where worder.status = 'Work in Progress' and 
+    pool.query(`select * from worder INNER JOIN customer ON worder.custid = customer.custid 
+                LEFT JOIN technicians ON technicians.techid = worder.techid 
+                where worder.status = 'Work in Progress' and 
                 worder.promised_date = CURRENT_DATE`, (error, results) => {
       if (error) {
         reject(error)
@@ -220,7 +228,7 @@ const getWorkorderCust = (custid) => {
 
 const getWorkorders = () => {
   return new Promise(function(resolve, reject) {
-    pool.query('SELECT * FROM worder ORDER BY worderid DESC', (error, results) => {
+    pool.query('SELECT * FROM worder INNER JOIN customer ON worder.custid = customer.custid LEFT JOIN technicians ON technicians.techid = worder.techid ORDER BY worder.worderid DESC', (error, results) => {
       if (error) {
         reject(error)
       }
@@ -234,13 +242,13 @@ const createWorkorder = (body) => {
  
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
-    const values  = [body.custid, body.cust_firstname, body.cust_lastname, body.brand, body.model, body.promised_date, body.inst, body.status]
-    pool.query(`INSERT INTO worder (custid, cust_firstname, cust_lastname, brand, model, promised_date, inst, status, date_created) VALUES ($1, $2, $3, $4, $5, $6, $7,$8, NOW())`, values,  (error, results) => {
+    const values  = [body.custid, body.brand, body.model, body.promised_date, body.inst, body.status]
+    pool.query(`INSERT INTO worder (custid, brand, model, promised_date, inst, status, date_created) VALUES ($1, $2, $3, $4, $5, $6,NOW())`, values,  (error, results) => {
 
       if (error) {
         reject(error)
       }
-      resolve(`A Work Order has been added added for ${body.cust_firstname} ${body.cust_lastname}`)
+      resolve(`A Work Order has been added added for custid:  ${body.custid}`)
     })
   })
 }
@@ -248,8 +256,8 @@ const createWorkorder = (body) => {
 const editWorkorder = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
-    const values  =  [body.worderid, body.custid,  body.cust_firtsname,  body.cust_lastname, body.brand, body.model, body.promised_date, body.inst]
-    pool.query(`UPDATE worder  SET custid= $2, cust_firstname = $2, cust_lastname = $3, brand = $4,  model = $5,  promised_date = $6 inst = $7 WHERE worderid = $1`, values ,  (error, results) => {
+    const values  =  [body.worderid, body.custid, body.brand, body.model, body.promised_date, body.inst]
+    pool.query(`UPDATE worder  SET custid = $2,  brand = $3,  model = $4,  promised_date = $5, inst = $6 WHERE worderid = $1`, values ,  (error, results) => {
 
       if (error) {
         reject(error)
@@ -278,7 +286,9 @@ const deleteWorkorder = (body) => {
 
 const gettechload = () => {
   return new Promise(function(resolve, reject) {
-    pool.query(`SELECT  COUNT(techid) AS counter, techid, tech_firstname, tech_lastname  from worder WHERE worder.status = 'Work in Progress' GROUP BY techid, tech_firstname, tech_lastname `, (error, results) => {
+    pool.query(`SELECT COUNT(worder.techid) AS counter, worder.techid, technicians.tech_firstname, technicians.tech_lastname from worder INNER JOIN technicians ON technicians.techid = worder.techid 
+                              WHERE worder.status = 'Work in Progress'  GROUP BY worder.techid, technicians.tech_firstname, technicians.tech_lastname  `, (error, results) => {
+                                                        
       if (error) {
         reject(error)
       }
@@ -294,27 +304,47 @@ const gettechload = () => {
 const checkInTech = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
-    const values  =  [body.worderid, body.techid,  body.tech_firstname,  body.tech_lastname]
-    pool.query(`UPDATE worder  SET techid= $2, tech_firstname = $3, tech_lastname = $4,  tech_datetime_in = NOW(),  status = 'Work in Progress' WHERE worderid = $1`, values ,  (error, results) => {
-
-      if (error) {
-        reject(error)
-      }
-      resolve(`Work Order  ${body.worderid} has been edited`)
-    })
-  })
+    const values  =  [body.worderid, body.techid, body.status]
+    pool.query(`UPDATE worder  SET techid= $2,  tech_datetime_in = NOW(),  tech_datetime_out = NULL, status = $3 
+                 WHERE EXISTS   
+              (
+                  SELECT 1 from worder_dtl  WHERE worder_dtl.worderid = $1 and 
+                                                  worder.worderid   = $1
+                  
+              )`, values ,  (error, results) => 
+              {
+                if (error) {
+                    reject(error)
+                 }
+                 if(results.rowCount === 0) {
+                  reject('Work Order service details not entered')
+                 }
+                  
+                  resolve(`Work Order  ${body.worderid} is now checked-in`)
+              })
+              })
 }
 
 const checkOutTech = (body) => {
   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
     const values  =  [body.worderid, body.tech_comment, body.status]
-    pool.query(`UPDATE worder  SET tech_datetime_out = NOW(), tech_comment = $2, status = $3 WHERE worderid = $1`, values ,  (error, results) => {
+    pool.query(`UPDATE worder  SET tech_datetime_out = NOW(),  tech_comment = $2, status = $3 
+               WHERE EXISTS   
+                (
+                    SELECT 1 from worder_dtl  WHERE worder_dtl.worderid = $1 and 
+                                                    worder.worderid   = $1
+                    
+                )` ,values ,  (error, results) => {
+  
+              if (error) {
+                reject(error)
+              }
+              if (results.rowCount === 0) {
+                reject('Work Order service details not entered')
+              }
 
-      if (error) {
-        reject(error)
-      }
-      resolve(`Work Order  ${body.worderid} technician is now checked out and Work Order marked as Complete`)
+              resolve(`Work Order  ${body.worderid}  is now checked out marked as Complete`)
     })
   })
 }
@@ -349,32 +379,64 @@ const completeWorkorder = (body) => {
   })
 }
 
+const closeWorkorder = (body) => {
+  return new Promise(function(resolve, reject) {
+    const values  =  [body.worderid]
+    pool.query(`UPDATE worder 
+                  SET amount = COALESCE(t.totalamtService,0) + (COALESCE(t.totalamtService,0) * tax / 100) +  
+                               COALESCE(p.totalamtParts,0) + (COALESCE(p.totalamtParts,0) * tax / 100), status = 'Closed' 
+                      FROM worder  w	
+                  INNER JOIN 
+                  (
+                      SELECT worderid , (SELECT tax from sys_settings) as tax,  SUM(price) AS totalamtService
+                      FROM worder_dtl  
+                      WHERE worderid = $1
+                      GROUP BY worderid
+                  )t ON w.worderid = t.worderid 
+                  LEFT JOIN 
+                  (
+                      SELECT worderid,  SUM(price) AS totalamtParts 
+                      FROM worder_parts 
+                      WHERE worderid = $1	
+                      GROUP BY worderid
+                  ) p ON w.worderid = p.worderid 
+                WHERE worder.worderid = $1`, values ,(error, results) => {
+                  if (error) {
+                    reject(error)
+                  }
+                  resolve(`Work Order  ${body.worderid} is now Closed`)
+                })
+        })
+}
+
 // Worder Details 
 const getWorkorderDtl = (id) => {
   return new Promise(function(resolve, reject) {
     const value = parseInt(id)
-    pool.query('SELECT * FROM worder_dtl WHERE worderid =$1', [value] , (error, results) => {
+    pool.query(`
+    SELECT * FROM worder_dtl WHERE worderid = $1 ORDER BY worderdtlid DESC`, [value] , (error, results) => {
       if (error) {
         reject(error)
       }
+
      
       resolve(results.rows);
     })
   }) 
 }
 const createWorkorderDtl = (body) => {
- 
- 
-  return new Promise(function(resolve, reject) {
+   return new Promise(function(resolve, reject) {
     /*  need to specify values on the pool query */
     const values  = [body.worderid,  body.serviceid, body.servicename, body.servicedescription, body.price]
-    pool.query(`INSERT INTO worder_dtl (worderid, serviceid, servicename, servicedescription, price) VALUES ($1, $2, $3,$4,$5)`, values,  (error, results) => {
-
-      if (error) {
-        reject(error)
-      }
-      resolve(`A Work Order Detail  has been added added for ${body.worderid}`)
-    })
+      pool.query(`INSERT INTO worder_dtl (worderid, serviceid, servicename, servicedescription, price) VALUES ($1, $2, $3,$4,$5)`, values,  (error, results) => {
+        if (error) {
+          reject(error)
+        }
+        resolve(`A Work Order Detail  has been added added for ${body.worderid}`)
+      })
+    
+     
+        
   })
 }
 
@@ -396,13 +458,74 @@ const deleteWorkorderDtl = (body) => {
   return new Promise(function(resolve, reject) {
     const id =  [parseInt(body.worderdtlid), parseInt(body.worderid)]
 
-    pool.query(`DELETE FROM worder WHERE worderid = $1 and worderdtlid = $2`, id, (error, results) => {
+    pool.query(`DELETE FROM worder_dtl WHERE worderdtlid = $1 and worderid = $2`, id, (error, results) => {
       if (error) {
         reject(error)
       }
       resolve(`Work Order deleted with  ID: ${body.worderdtlid}`)
     })
   })
+}
+
+/* Work Order Parts */
+
+const getWorkorderDtlParts = (id) => {
+  return new Promise(function(resolve, reject) {
+    const value = parseInt(id)
+    pool.query(`SELECT * FROM worder_parts WHERE worderid = $1 ORDER BY partsid DESC`, [value] , (error, results) => {
+      if (error) {
+        reject(error)
+      }
+      resolve(results.rows);
+    })
+  }) 
+}
+
+const createWorkorderDtlParts = (body) => {
+  return new Promise(function(resolve, reject) {
+   /*  need to specify values on the pool query */
+   const values  = [body.worderid, body.partsname, body.price]
+     pool.query(`INSERT INTO worder_parts (worderid, partsname, price) VALUES ($1, $2, $3)`, values,  (error, results) => {
+       if (error) {
+        console.log(results)
+        console.log(error)
+         reject(error)
+       }
+       resolve(`A Work Order Detail has been added added for ${body.worderid}`)
+     })
+   
+    
+       
+ })
+}
+
+const editWorkorderDtlParts = (body) => {
+ return new Promise(function(resolve, reject) {
+   /*  need to specify values on the pool query */
+   const values  = [parseInt(body.worderid),  parseInt(body.partsid), body.partsname, body.price]
+   pool.query(`UPDATE worder_parts SET partsname = $3,  price  = $4  WHERE partsid = $2 and worderid = $1`, values ,  (error, results) => {
+     if (error) {
+       reject(error)
+     }
+      resolve(`Work Order Parts/Material detail  ${body.worderid} has been edited`)
+   })
+ })
+}
+
+const deleteWorkorderDtlParts = (body) => {
+
+ return new Promise(function(resolve, reject) {
+   const id =  [parseInt(body.partsid), parseInt(body.worderid)]
+  
+
+
+   pool.query(`DELETE FROM worder_parts WHERE partsid = $1 and worderid = $2`, id, (error, results) => {
+     if (error) {
+       reject(error)
+     }
+     resolve(`Work Order Parts/Material detail deleted with  ID: ${body.partsid}`)
+   })
+ })
 }
 
   module.exports = {
@@ -426,6 +549,7 @@ const deleteWorkorderDtl = (body) => {
     checkOutTech,
     reassignTech,
     completeWorkorder,
+    closeWorkorder,
     deleteWorkorder,
     getWorkorderDtl,
     getWorkordersdue,
@@ -433,6 +557,9 @@ const deleteWorkorderDtl = (body) => {
     getWorkorderCust,
     createWorkorderDtl,
     editWorkorderDtl,
-    deleteWorkorderDtl
-    
+    deleteWorkorderDtl,
+    getWorkorderDtlParts,
+    createWorkorderDtlParts,
+    editWorkorderDtlParts,
+    deleteWorkorderDtlParts
   }

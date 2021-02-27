@@ -8,7 +8,6 @@ import 'react-day-picker/lib/style.css';
 
 
 
-
 const required   = val => val && val.length;
 const maxLength  = len => val => !val || (val.length <= len);
 const minLength  = len => val => val && (val.length >= len);
@@ -18,7 +17,7 @@ let currSelectId, selectedDate;
 
 let listItems = [{}];
 
-class WoformAdd extends Component {
+class WoformEdit extends Component {
     constructor (props) {
         super(props); {
             this.state = 
@@ -31,10 +30,10 @@ class WoformAdd extends Component {
                 brand:  '',
                 inst: '',
                 promised_date: '',
-                selectedDay: new Date().toISOString().slice(0,10),
+                currenDate:  new Date(),
+                selectedDay: this.props.selectedRow.promised_date.slice(0,10), /* substr(0,10) will do remove the time */
                 isEmpty: true,
                 isDisabled: false,
-              
               
                 
                 
@@ -52,49 +51,36 @@ class WoformAdd extends Component {
             
 
          }
-         this.handleDayChange = this.handleDayChange.bind(this);
+       this.handleDayChange = this.handleDayChange.bind(this);
+                
     } 
     
-
+    currSelectId  = this.props.selectedRow.custid;
 } 
+
+handleSubmitEdit(values) {
+ 
+    this.props.editWorkOrder( 
+        this.props.selectedRow.worderid,
+        currSelectId, 
+        values.brand, 
+        values.model, 
+        this.state.selectedDay,
+        values.inst 
+      );
+     
+     this.props.toggleModalEdit();    
+               
+}
 
 handleDayChange(selectedDay, modifiers, dayPickerInput) {
     const input = dayPickerInput.getInput();
     this.setState({
-      selectedDate,
+      selectedDay,
       isEmpty: !input.value.trim(),
       isDisabled: modifiers.disabled === true,
     });
   }
-  
-
-handleSubmitAdd(values) {
-
- if(currSelectId) {
-    const selCustomer =   this.props.customer.customer.filter(customer => customer.custid ===  currSelectId); 
-
-    selCustomer.forEach(el =>  { 
-         this.props.addWorkorder( currSelectId, 
-             el.firstname,
-             el.lastname, 
-             values.brand, 
-             values.model, 
-             this.state.selectedDay,
-             values.inst, 
-             'Open'
-           );
-            
-     })
-     this.props.toggleModalAdd();    
- }
- else {
-      alert("Customer not selecected")
- }
- 
-   
-    
-               
-}
 
 componentDidMount() {
    
@@ -109,15 +95,17 @@ render()
 {
     const { selectedDay, isDisabled, isEmpty } = this.state;
     return (
+          
             <div>
-                <LocalForm onSubmit={values => this.handleSubmitAdd(values)}>
+                <LocalForm onSubmit={values => this.handleSubmitEdit(values)}>
                            
                             <Row className = "form-group"> 
                             <Label htmlFor="custid"md={3}>Customer</Label>
                                 <Col md={8}>
-                                       
+                                        
                                         <Select 
                                             options={listItems}
+                                            value={listItems.filter(option => option.value ===  this.props.selectedRow.custid)} 
                                             onChange={opt => currSelectId = opt.value}
                                             
                                         />
@@ -131,6 +119,7 @@ render()
                                          <Control.text model =".brand" id="brand" name="brand"
                                                        placeholder="Brand"
                                                        className="form-control"
+                                                       defaultValue = {this.props.selectedRow.brand}
                                                        validators={
                                                            {
                                                             required, 
@@ -158,6 +147,7 @@ render()
                                          <Control.text model =".model" id="model" name="model"
                                                        placeholder="Model"
                                                        className="form-control"
+                                                       defaultValue = {this.props.selectedRow.model}
                                                        validators={
                                                            {
                                                             required, 
@@ -167,12 +157,11 @@ render()
                                                        />
                                       <Errors
                                                     className="text-danger"
-                                                    model=".model"
+                                                    model=".state"
                                                     show="touched"
                                                     component="div"
                                                     messages={{
-                                                        required: 'Required',
-                                                        minLength: 'Must be at least 2 characters',
+                                                        minLength: 'Must be 5 digit numberic code',
                                                         
                                                     }
                                                 }
@@ -186,8 +175,7 @@ render()
                                      <Col md={8}>
                                      <DayPickerInput
                                          value={selectedDay}
-                                          
-                                          onDayChange={this.handleDayChange}
+                                         onDayChange={this.handleDayChange}
                                           dayPickerProps={{
                                                           selectedDays: selectedDay,
                                                           disabledDays: {
@@ -195,31 +183,6 @@ render()
                                                           },
                                            }}
                                         />
-
-                                         {/*
-                                         <Control.text  model =".promised_date" id="promised_date" name="promised_date"
-                                                       placeholder="YYYY-MM-DD"
-                                                       className="form-control"
-                                                   
-                                                       validators={
-                                                           {
-                                                            required, 
-                                                                                                                       
-                                                           }
-                                                       }
-                                                       />
-                                         <Errors
-                                                    className="text-danger"
-                                                    model=".promised_date"
-                                                    show="touched"
-                                                    component="div"
-                                                    messages={{
-                                                        required: 'Required',
-                                                       
-                                                    }    
-                                                }
-                                         />  
-                                            */}
                                                            
                                      </Col>
                       
@@ -232,6 +195,7 @@ render()
                                          <Control.textarea model = ".inst" id= "inst" name="inst"
                                                        placeholder= ""
                                                        className="form-control"
+                                                       defaultValue = {this.props.selectedRow.inst}
                                                        rows="4"
                                                        validators={
                                                         {
@@ -242,7 +206,7 @@ render()
                                                     />
                                    <Errors
                                                  className="text-danger"
-                                                 model=".inst"
+                                                 model=".servicedescription"
                                                  show="touched"
                                                  component="div"
                                                  messages={{
@@ -270,5 +234,4 @@ render()
     }
 }   
 
-export default WoformAdd;
-
+export default WoformEdit;

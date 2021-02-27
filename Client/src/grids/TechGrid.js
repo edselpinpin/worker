@@ -40,8 +40,8 @@ class Techgrid extends Component {
         this.state = {
             columnDefs: [
                { headerName: 'Tech Code', field: 'techid', maxWidth: 100, sortable: true, filter: true, checkboxSelection: true, pinned: 'left'},
-               { headerName: 'First Name', field: 'firstname', sortable: true, filter: true},
-               { headerName: 'Last Name', field: 'lastname', maxWidth: 150, sortable: true, filter: true},
+               { headerName: 'First Name', field: 'tech_firstname', sortable: true, filter: true},
+               { headerName: 'Last Name', field: 'tech_lastname', maxWidth: 150, sortable: true, filter: true},
             ],
             isModalOpenAdd : false,
             isModalOpenDel : false,

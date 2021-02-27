@@ -13,16 +13,9 @@ class Serviceformview extends Component {
                 servicename: '',
                 servicedescription: '',
                 price: '',
-
-              
-            
-
              }
     } 
 } 
-
-
-
     
 render() 
 {
@@ -43,8 +36,6 @@ render()
                                      </Col>
                             </Row>
 
-                            
-                           
                             <Row className = "form-group">                               
                                <Label htmlFor="servicename" md={3}>servicename</Label>
                                      <Col md={8}>

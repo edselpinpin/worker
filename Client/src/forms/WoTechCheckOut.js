@@ -38,11 +38,11 @@ setLocalState(value){
 }
 
 handleSubmit(values) {
-    const status = (values.complete) ? 'Complete' : 'Work in Progress';
+   // const status = (values.complete) ? 'Complete' : 'Work in Progress';
 
     this.props.checkOutTech(this.state.worderid,
                             values.tech_comment, 
-                            status,
+                            'Complete',
                           );  
      this.props.toggleModalCheckOutTech();    
                
@@ -70,7 +70,7 @@ render()
                                     
                                      </Col>
                             </Row>
-
+                          {/*
                             <Row className = "form-group">
                                 <Col md={{size: 6, offset: 2}}>
                                     <div className = "form-check">
@@ -85,7 +85,9 @@ render()
                                     </div>
                                 </Col>
 
+
                             </Row>
+                          */}
                            
                             <Row className = "form-group">
                                         <Col md={{size: 5}}>

@@ -513,7 +513,7 @@ export const fetchWorkorder = () => dispatch => {
                 })
  }
  // EDIT WORK ORDER 
- export const editWorkorder = (worderid, custid, cust_firstname, cust_lastname, brand, model, promised_date, inst) => dispatch  => {
+ export const editWorkorder = (worderid, custid, brand, model, promised_date, inst) => dispatch  => {
    
     return fetch( serverUrl + '/workorder',
                 {
@@ -521,7 +521,7 @@ export const fetchWorkorder = () => dispatch => {
                     headers:{
                         "Content-type" : "application/json",
                     },
-                    body: JSON.stringify({worderid, custid, cust_firstname, cust_lastname, brand, model, promised_date, inst}),
+                    body: JSON.stringify({worderid, custid, brand, model, promised_date, inst}),
                 })
                .then(response => {
                   return response.text()
@@ -562,7 +562,7 @@ export const fetchWorkorder = () => dispatch => {
 
 // ASSIGN TECHNICIAN 
 
-export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => dispatch  => {
+export const checkInTech = (worderid, techid, status) => dispatch  => {
    
     return fetch( serverUrl + '/checkInTech',
                 {
@@ -570,7 +570,7 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
                     headers:{
                         "Content-type" : "application/json",
                     },
-                    body: JSON.stringify({worderid, techid, tech_firstname, tech_lastname}),
+                    body: JSON.stringify({worderid, techid, status}),
                 })
                .then(response => {
                   return response.text()
@@ -654,6 +654,29 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
                 })
  }
 
+ export const closeWorkorder = (worderid) => dispatch  => {
+   
+    return fetch( serverUrl + '/close',
+                {
+                    method: "PUT",
+                    headers:{
+                        "Content-type" : "application/json",
+                    },
+                    body: JSON.stringify({worderid}),
+                })
+               .then(response => {
+                  return response.text()
+                })
+                .then(data => {
+                    alert(data);
+                    dispatch(fetchWorkorder());
+                })
+                .catch(error => {
+                    alert('Close Work Order error' + error)
+                })
+ }
+
+
  // WORK ORDER DTL 
 
  export const fetchWorkorderDtl = (id) => dispatch => {
@@ -686,7 +709,38 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
       
   }
 
-// WORK ORDER TRANSACTIONS 
+  export const fetchWorkorderDtlParts = (id) => dispatch => {
+    return fetch( serverUrl + `/workorderdtlparts/${id}`,
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    },
+                
+                   
+                })
+               .then(response => {
+                
+                  return response
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildworkorderdtlParts(data)))
+                .catch(error => console.log(`Work Order Parts/Materials Details fetch error ${error}`))
+};
+         
+  
+  export const buildworkorderdtlParts = workorderdtl => {
+   
+      return {
+           type: ActionTypes.FETCH_WORKORDER_PARTS,
+           payload: workorderdtl 
+      }
+      
+  }
+
+
+// WORK ORDER TRANSACTIONS SERVICE 
 
   export const addWorkorderDtl = (worderid, serviceid, servicename, servicedescription, price) => dispatch  => {
               
@@ -712,27 +766,6 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
  }
  // EDIT WORK ORDER 
 
- export const editWorkorderDtl = (worderdtlid, worderid, serviceid, servicename, servicedecription, price) => dispatch  => {
-   
-   return fetch( serverUrl + '/workordedtl',
-               {
-                   method: "PUT",
-                   headers:{
-                       "Content-type" : "application/json",
-                   },
-                   body: JSON.stringify({worderdtlid, worderid, serviceid, servicename, servicedecription, price}),
-               })
-              .then(response => {
-                 return response.text()
-               })
-               .then(data => {
-                   alert(data);
-                   dispatch(fetchWorkorderDtl());
-               })
-               .catch(error => {
-                   alert('Edit Work Order Detail error' + error)
-               })
-}
  // DELETE WORK ORDER  
 
  export const deleteWorkorderDtl = (worderdtlid, worderid) => dispatch  => {
@@ -749,11 +782,84 @@ export const checkInTech = (worderid, techid, tech_firstname, tech_lastname) => 
                  return response.text()
                })
                .then(data => {
-                   alert(data);
-                   dispatch(fetchWorkorder());
+                  
+                dispatch(fetchWorkorderDtl(worderid));
                })
                .catch(error => {
-                   alert('Delete Work Order  error' + error)
+                   alert('Delete Work Order detail error' + error)
+               })
+}
+
+// WORK ORDER TRANSACTIONS PARTS/MATERIALS 
+
+export const addWorkorderDtlParts = (worderid, partsname, price) => dispatch  => {
+              
+    
+    return fetch( serverUrl + '/workorderdtlparts',
+                {
+                    method: "POST",
+                    headers:{
+                        "Content-type" : "application/json",
+                    },
+                    body: JSON.stringify({worderid, partsname, price}),
+                })
+               .then(response => {
+                  return response.text()
+                })
+                .then(data => {
+                    console.log(data)    
+                    dispatch(fetchWorkorderDtlParts(worderid));
+                })
+                .catch(error => {
+                    alert('Add Work Order Detail error' + error)
+                })
+ }
+ // EDIT WORK ORDER PARTS/MATERIALS
+
+ export const editWorkorderDtlParts = (worderid, partsid, partsname, price)  => dispatch  => {
+   
+   return fetch( serverUrl + '/workorderdtlparts',
+               {
+                   method: "PUT",
+                   headers:{
+                       "Content-type" : "application/json",
+                   },
+                   body: JSON.stringify({worderid, partsid, partsname, price}),
+               })
+              .then(response => {
+                 return response.text()
+               })
+               .then(data => {
+                   alert(data);
+                   dispatch(fetchWorkorderDtlParts(worderid));
+               })
+               .catch(error => {
+                   alert('Edit Work Order Parts/Material Detail error' + error)
+               })
+}
+ // DELETE WORK ORDER PARTS/MATERIALS 
+
+
+
+ export const deleteWorkorderDtlParts = (partsid, worderid) => dispatch  => {
+    
+   return fetch( serverUrl + '/workorderDtlparts',
+               {
+                   method: "delete",
+                   headers:{
+                       "Content-type" : "application/json",
+                   },
+                   body: JSON.stringify({partsid, worderid}),
+               })
+              .then(response => {
+                 return response.text()
+               })
+               .then(data => {
+                   alert(data);
+                   dispatch(fetchWorkorderDtlParts(worderid));
+               })
+               .catch(error => {
+                   alert('Delete Work Order detail error' + error)
                })
 }
 

@@ -205,8 +205,8 @@ class Servicegrid extends Component {
                    <ModalHeader toggle={this.toggleModalEdit}>Edit Service Menu</ModalHeader>
                     <ModalBody>
                         <ServiceformEdit  editService={this.props.editService}
-                                      toggleModalEdit = {this.toggleModalEdit}
-                                      selectedRow = {this.state.selectedRow}/>
+                                          toggleModalEdit = {this.toggleModalEdit}
+                                          selectedRow = {this.state.selectedRow}/>
                     </ModalBody>
                 </Modal>
 
