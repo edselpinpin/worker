@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { Modal, ModalBody, ModalHeader, Row, Col, Button } from 'reactstrap';
+import { Modal, ModalBody, ModalHeader, Row, Col, Button, Alert } from 'reactstrap';
 import { LocalForm} from 'react-redux-form';
 import { connect } from "react-redux";
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -127,7 +127,8 @@ class Wogriddtl extends Component {
         });
       }
     else {
-        alert('Work Order not Open or Work in Progress')
+       // alert('Work Order not Open or Work in Progress')
+       <Alert variant="danger">Work Order not Open or Work in Progress</Alert>
     }
 
 

@@ -3,6 +3,10 @@ import Wodue from '../grids/WodueGrid';
 import Techload from '../grids/TechloadGrid';
 import { connect } from "react-redux";
 import { fetchdDueWorkorder, fetchdTodayWorkorder, fetchTechLoad} from '../actions/ActionCreators';
+import { Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
+//import {ReactComponent as home} from '../images/home.svg'
+//import  HomeImg from '../images/home.png'
+import  HomeImgSvg from '../images/home.svg'
 
 let today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -76,13 +80,19 @@ render()
                          
                    </div>
               </div>
-              <div className = "row justify-content-md-center">
+              <div className = "row">
                     <div className = "col-md-6 col-xs-12  mt-5" >
                       <h6>Technician's Workload</h6>   
                          <Techload 
                           techload = {this.props.techload.techload} />
                     </div>
+                    <div className = "col-md-6 justify-content-center mt-5" >
+                            { /* <img  height = {360} width = {360} src={HomeImg} /> */ }
+                             <img  height = {330} width = {330} src={HomeImgSvg} />
+                    </div>
               </div>
+
+              
          </div>    
            
         </React.Fragment>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Modal, ModalBody, ModalHeader, Row, Col, Button } from 'reactstrap';
+import { Alert } from 'react-bootstrap';
 import { LocalForm} from 'react-redux-form';
 import { connect } from "react-redux";
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -251,7 +252,8 @@ class Wogridlist extends Component {
          }
          
          else {
-             alert('Work Order Status not in Work in Progress')
+            alert('Work Order Status not in Work in Progress')
+          // return <div> <Alert>Work Order Status not in Work in Progress</Alert> </div>
          }
          
        
@@ -283,6 +285,7 @@ class Wogridlist extends Component {
     }
 
        render() {
+          
         return (
             <React.Fragment> 
                     <div className = "col-12 mt-2">
@@ -337,8 +340,6 @@ class Wogridlist extends Component {
                                         onClick={this.toggleModalCloseWo}>
                                     <GrIcons.GrCompliance/> 
                                     </Button>{'    '}
-
-                                    
 
                                 </div>
 

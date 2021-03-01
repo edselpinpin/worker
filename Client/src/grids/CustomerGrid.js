@@ -229,7 +229,7 @@ const mapDispatchToProps = {
                 </div>
                      */}
 
-                <div style={{height: 300, width: '100%'}} className="ag-theme-fresh">
+                <div style={{height: 220, width: '100%'}} className="ag-theme-fresh">
                         
                         
                         <AgGridReact columnDefs={this.state.columnDefs} 

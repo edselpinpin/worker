@@ -26,7 +26,7 @@ class Wogrid extends Component {
              <div className = "col-12 mt-2">
                 <h4>WO History</h4>
             </div>     
-            <div style={{height: 300, width: '100%'}} className="ag-theme-fresh">
+            <div style={{height: 220, width: '100%'}} className="ag-theme-fresh">
                 
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                  rowSelection="single"

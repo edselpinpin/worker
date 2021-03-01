@@ -137,7 +137,7 @@ class Techgrid extends Component {
                 <div className = "col-12 mt-2">
                         <h4>Technicians</h4>
                 </div>  
-                <div style={{height: 300, width: '100%'}} className="ag-theme-fresh">
+                <div style={{height: 220, width: '100%'}} className="ag-theme-fresh">
                         <AgGridReact  columnDefs={this.state.columnDefs} 
                                       rowSelection="single"
                                       rowData={this.props.tech.tech}

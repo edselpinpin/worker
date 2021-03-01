@@ -863,6 +863,85 @@ export const addWorkorderDtlParts = (worderid, partsname, price) => dispatch  =>
                })
 }
 
+// System Settings 
+
+export const fetchSysSettings = () => dispatch => {
+    return fetch( serverUrl + '/syssettings',
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    }
+                })
+               .then(response => {
+
+                   console.log(response)
+                  return response
+
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildsysSettings(data)))
+                .catch(error => console.log(`System Settings fetch error ${error}`))
+};
+  
+  export const buildsysSettings = workorder => {
+    
+      return {
+           type: ActionTypes.FETCH_SYS_SETTINGS,
+           payload: workorder 
+      }
+      
+  }
+
+// WORK ORDER TRANSACTIONS 
+
+  export const addSysSettings = (bussiness_name,street,city,state,zip,phone_num,email,tax, id) => dispatch  => {
+    
+    return fetch( serverUrl + '/syssettings',
+                {
+                    method: "POST",
+                    headers:{
+                        "Content-type" : "application/json",
+                    },
+                    body: JSON.stringify({bussiness_name,street,city,state,zip,phone_num,email,tax, id}),
+                })
+               .then(response => {
+                  return response.text()
+                })
+                .then(data => {
+                    dispatch(fetchSysSettings());
+                })
+                .catch(error => {
+                    alert('Add System Setting error' + error)
+                })
+ }
+ // EDIT WORK ORDER 
+ export const editSysSettings = (bussiness_name,street,city,state,zip,phone_num,email,tax, id) => dispatch  => {
+   
+    return fetch( serverUrl + '/workorder',
+                {
+                    method: "PUT",
+                    headers:{
+                        "Content-type" : "application/json",
+                    },
+                    body: JSON.stringify({bussiness_name,street,city,state,zip,phone_num,email,tax, id}),
+                })
+               .then(response => {
+                  return response.text()
+                })
+                .then(data => {
+                    dispatch(fetchSysSettings());
+                })
+                .catch(error => {
+                    alert('Edit System Setting  Error' + error)
+                })
+ }
+
+
+
+
+
 
 
 

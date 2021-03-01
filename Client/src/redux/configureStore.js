@@ -10,6 +10,7 @@ import WorkOrderReducer from '../reducers/workorder';
 import WorkOrderDtlReducer from '../reducers/workorderdtl';
 import WorkOrderPartsReducer from '../reducers/worderparts';
 import { InitialCustommer } from '../redux/forms';
+import Sys_settingsReducer from '../reducers/settings';
 
 
 export const ConfigureStore = () => {
@@ -26,6 +27,7 @@ export const ConfigureStore = () => {
             workorderdtl: WorkOrderDtlReducer,
             workoderparts: WorkOrderPartsReducer,
             custworkorder: WorkOrderReducer,
+            sys_settings: Sys_settingsReducer,
             ...createForms({
                 customerForm: InitialCustommer
             })    

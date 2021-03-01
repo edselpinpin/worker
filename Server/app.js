@@ -14,7 +14,43 @@ app.use(function (req, res, next) {
 
 app.listen(port, () => {
   console.log(`App running on port ${port}.`)
+
 })
+
+// SYSTEM SETTINGS 
+app.get('/syssettings', (req, res) => {
+  db_model.getSysSettings()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.post('/sysettings', (req, res) => {
+ 
+  console.log(req.body)
+  db_model.createSysSettings(req.body)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
+app.put('/syssettings', (req, res) => {
+  console.log(req.body)
+  db_model.editSysSettings(req.body)
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
+
 
 // CUSTOMER 
 app.get('/customer', (req, res) => {

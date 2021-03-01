@@ -96,6 +96,12 @@ body {
 #jumbotron h5 {
     color: black;
 }
+
+#jumbotron  h6 {
+  color: white;
+}
+
+
 #navhead {
   background-color: #252424;
   font-size: 16px;

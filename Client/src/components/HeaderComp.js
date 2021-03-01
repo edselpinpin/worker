@@ -2,7 +2,7 @@ import React, { Component, }  from 'react';
 import { Nav, Navbar,NavbarToggler, Collapse, NavItem, Jumbotron,
         Button} from 'reactstrap';
 import { NavLink } from 'react-router-dom';
-
+import { Col, Row} from 'reactstrap';
 
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
@@ -15,14 +15,13 @@ import { IconContext } from 'react-icons/lib';
 class Header extends Component {
     constructor(props) {
         super(props);
-        this.toggleNav = this.toggleNav.bind(this);
+       
         this.state = {
-         
-
           isNavOpen: false,
           isModalOpen: false
         };
         this.toggleNav = this.toggleNav.bind(this); // allow this to be used on toggleNav
+        
     }
 
     toggleNav() {
@@ -33,17 +32,33 @@ class Header extends Component {
 
     render()
     {
+        const bussiness_name =  this.props.sys_settings1.map(sys => sys.bussiness_name);
+        const address =  this.props.sys_settings1.map(sys => sys.street) + ' ' + 
+                         this.props.sys_settings1.map(sys => sys.city)   +  ' ' +
+                         this.props.sys_settings1.map(sys => sys.state) + ' ' + 
+                         this.props.sys_settings1.map(sys => sys.zip);
+         const  phone_num = this.props.sys_settings1.map(sys => sys.phone_num) + '  ' +
+                       this.props.sys_settings1.map(sys => sys.email);
+         const email =  this.props.sys_settings1.map(sys => sys.email);     
+
+
         return(
             <React.Fragment>  
              <IconContext.Provider value={{color:"white"}}>   
             <Jumbotron fluid style={{margin: 0}} id = "jumbotron">
                     <div className="container">
-                        <div className="row">
-                            <div className="col">
+                       <div className = 'row'>
+                            <div className = "col-9">
                                 <h2>The Worker</h2>
                                 <h5>Work Order Tracker App</h5>
                             </div>
-                        </div>
+
+                            <div className = "col-3">
+                                <h6>{bussiness_name}</h6>
+                                <h6>{address}</h6>
+                                <h6>{phone_num}</h6>
+                            </div>
+                            </div>   
                     </div>
                 </Jumbotron>
 

@@ -1,7 +1,7 @@
 import Header from './HeaderComp';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import { fetchCustomer, fetchService, fetchTech, fetchWorkorder, fetchdDueWorkorder, fetchdTodayWorkorder} from '../actions/ActionCreators';
+import { fetchCustomer, fetchService, fetchTech, fetchWorkorder, fetchdDueWorkorder, fetchdTodayWorkorder, fetchSysSettings} from '../actions/ActionCreators';
 import { connect } from "react-redux";
 import Home from './HomeComp';
 import Workorder from './WorkorderComp';
@@ -15,43 +15,57 @@ const mapStateToProps = state => {
   return {
       customer: state.customer,
       service: state.service,
-      tech: state.tech
+      tech: state.tech,
+      sys_settings: state.sys_settings
   };
 };
 
 const mapDispatchToProps = {
+  fetchSysSettings: () => (fetchSysSettings()),
   fetchCustomer: () => (fetchCustomer()),
   fetchService: () => (fetchService()),
   fetchTech: () => (fetchTech()),
   fetchWorkorder:() => (fetchWorkorder()),
   fetchdDueWorkorder:() => (fetchdDueWorkorder()),
-  fetchdTodayWorkorder: () => (fetchdTodayWorkorder())
+  fetchdTodayWorkorder: () => (fetchdTodayWorkorder()),
+ 
   
 }
 
 
 class Main extends Component {
+  
 componentDidMount(){
+  this.props.fetchSysSettings();
   this.props.fetchCustomer();
   this.props.fetchService();
   this.props.fetchTech();
- this.props.fetchWorkorder();
- this.props.fetchdDueWorkorder();
- this.props.fetchdTodayWorkorder();
+  this.props.fetchWorkorder();
+  this.props.fetchdDueWorkorder();
+  this.props.fetchdTodayWorkorder();
+ 
+ 
 }
+
   
 render() {
   return (
     <div>
       <Router>
-        <Header />
+        <Header
+          sys_settings1 = {this.props.sys_settings.sys_settings} />
         <Switch>
             <Route path='/'     exact component={Home}/>
             <Route path='/workorder' component={Workorder}/>
             <Route path='/invoice' component={Invoicewo}/>
             <Route path='/customer' component={Customerlist}/>
             <Route path='/service' component={Servicelist}/>
-            <Route path='/settings' component={SysSettings}/>
+            <Route exact path='/settings' render={()=> <SysSettings
+                                                       sys_settings1 = {this.props.sys_settings.sys_settings}
+                                                      />} /> 
+                                                        
+                                                          
+                                                 
         </Switch>
       </Router>
      </div>
