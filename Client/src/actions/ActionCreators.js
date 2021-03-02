@@ -159,7 +159,7 @@ export const addService = (servicename, servicedescription, price) => dispatch  
 
  export const editService = (serviceid, servicename, servicedescription, price) => dispatch  => {
    
-   return fetch( serverUrl + '/editservice',
+   return fetch( serverUrl + '/service',
                {
                    method: "PUT",
                    headers:{
@@ -220,7 +220,7 @@ export const addService = (servicename, servicedescription, price) => dispatch  
 
 
   export const fetchTechLoad = () => dispatch => {
-    return fetch(serverUrl + '/techload',
+    return fetch(serverUrl + '/home/techload',
                 {
                     method: "GET",
                     headers:{
@@ -293,7 +293,7 @@ export const fetchTech= () => dispatch => {
 
  export const editTech = (techid, firstname, lastname) => dispatch  => {
    
-   return fetch( serverUrl + '/edittech',
+   return fetch( serverUrl + '/tech',
                {
                    method: "PUT",
                    headers:{
@@ -368,7 +368,7 @@ export const remove_db_profile = () => {
 // WORK ORDER 
 
 export const fetchdDueWorkorder = () => dispatch => {
-    return fetch( serverUrl + '/workorderdue',
+    return fetch( serverUrl + '/home/workorderdue',
                 {
                     method: "GET",
                     headers:{
@@ -397,7 +397,7 @@ export const builddueworkorder = workorder => {
 }
 
 export const fetchCustWorkorder = (custid) => dispatch => {
-    return fetch( serverUrl + `/workordercust/${custid}`,
+    return fetch( serverUrl + `/home/workordercust/${custid}`,
    
                 {
                     method: "GET",
@@ -430,7 +430,7 @@ export const buildCustworkorder = workorder => {
 
 
 export const fetchdTodayWorkorder = () => dispatch => {
-    return fetch( serverUrl + '/workordertoday',
+    return fetch( serverUrl + '/home/workordertoday',
                 {
                     method: "GET",
                     headers:{
@@ -564,7 +564,7 @@ export const fetchWorkorder = () => dispatch => {
 
 export const checkInTech = (worderid, techid, status) => dispatch  => {
    
-    return fetch( serverUrl + '/checkInTech',
+    return fetch( serverUrl + '/workordertrans/checkInTech',
                 {
                     method: "PUT",
                     headers:{
@@ -586,7 +586,7 @@ export const checkInTech = (worderid, techid, status) => dispatch  => {
 
  export const checkOutTech = (worderid, tech_comment, status) => dispatch  => {
    
-    return fetch( serverUrl + '/checkoutTech',
+    return fetch( serverUrl + '/workordertrans/checkoutTech',
                 {
                     method: "PUT",
                     headers:{
@@ -610,7 +610,7 @@ export const checkInTech = (worderid, techid, status) => dispatch  => {
 // RE-ASSIGN TECHNICIAN 
  export const reassignTech = (worderid) => dispatch  => {
    
-    return fetch( serverUrl + '/reassigntech',
+    return fetch( serverUrl + '/workordertrans/reassigntech',
                 {
                     method: "PUT",
                     headers:{
@@ -634,7 +634,7 @@ export const checkInTech = (worderid, techid, status) => dispatch  => {
 
  export const completeWorkorder = (worderid) => dispatch  => {
    
-    return fetch( serverUrl + '/reassigntech',
+    return fetch( serverUrl + '/workordertrans/reassigntech',
                 {
                     method: "PUT",
                     headers:{
@@ -656,7 +656,7 @@ export const checkInTech = (worderid, techid, status) => dispatch  => {
 
  export const closeWorkorder = (worderid) => dispatch  => {
    
-    return fetch( serverUrl + '/close',
+    return fetch( serverUrl + '/workordertrans/close',
                 {
                     method: "PUT",
                     headers:{
@@ -919,7 +919,7 @@ export const fetchSysSettings = () => dispatch => {
  // EDIT WORK ORDER 
  export const editSysSettings = (bussiness_name,street,city,state,zip,phone_num,email,tax, id) => dispatch  => {
    
-    return fetch( serverUrl + '/workorder',
+    return fetch( serverUrl + '/syssettings',
                 {
                     method: "PUT",
                     headers:{
