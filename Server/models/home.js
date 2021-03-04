@@ -21,7 +21,7 @@ const getWorkordersdue = () => {
       pool.query(`select * from worder INNER JOIN customer ON worder.custid = customer.custid 
                   LEFT JOIN technicians ON technicians.techid = worder.techid 
                   where worder.status = 'Work in Progress' and 
-                  worder.promised_date = CURRENT_DATE`, (error, results) => {
+                  worder.promised_date >= CURRENT_DATE`, (error, results) => {
         if (error) {
           reject(error)
         }

@@ -73,7 +73,7 @@ render()
                                                                                    />  
                    </div>
                    <div className = "col-md-6 col-xs-12 mt-3">
-                      <h6>Work Order(s) due Today</h6> 
+                      <h6>Work Order(s) in Process  </h6> 
                       <Wodue 
                         workorders = {this.props.wordertoday.wordertoday}
                     /> 
