@@ -1,7 +1,7 @@
 const express = require('express')
 const db_model = require('../models/workorderPrt')
 const workorderPrtRouter = express.Router();
-// CUSTOMER 
+ 
 workorderPrtRouter.route('/') 
 .post((req, res) => {
    

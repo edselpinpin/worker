@@ -4,6 +4,7 @@ const initialState = {
     workorder: [],
     worderdue: [],
     wordertoday: [],
+    worderopen:[],
     custworkorder: []
 }
 
@@ -33,6 +34,12 @@ const WorkOrderReducer = (state = initialState, action) => {
                 wordertoday: action.payload
             }    
         
+        case ActionTypes.FETCH_OPEN_WORKORDER:
+            return{
+                ...state,
+                worderopen: action.payload
+            }       
+             
         case ActionTypes.ADD_WORKORDER:
             return {
                 ...state, 

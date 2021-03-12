@@ -1,7 +1,7 @@
 const express = require('express')
 const db_model = require('../models/workorder')
 const workorderRouter = express.Router();
-// CUSTOMER 
+
 workorderRouter.route('/') 
 .get((req, res) => {
     db_model.getWorkorders()

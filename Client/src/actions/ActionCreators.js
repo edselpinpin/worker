@@ -387,10 +387,40 @@ export const fetchdDueWorkorder = () => dispatch => {
                 .catch(error => console.log(`Work Order due fetch error ${error}`))
 };
 
+export const fetchdOpenWorkorder = () => dispatch => {
+    return fetch( serverUrl + '/home/workorderopen',
+                {
+                    method: "GET",
+                    headers:{
+                        "Content-type" : "application/javascript"
+                    
+                    }
+                })
+               .then(response => {
+
+                   console.log(response)
+                  return response
+
+                })
+                .then(response => response.json())
+                .then(data => dispatch(buildopenworkorder(data)))
+                .catch(error => console.log(`Work Order due fetch error ${error}`))
+};
+
+
 export const builddueworkorder = workorder => {
     
     return {
          type: ActionTypes.FETCH_DUE_WORKORDER,
+         payload: workorder 
+    }
+    
+}
+
+export const buildopenworkorder = workorder => {
+    
+    return {
+         type: ActionTypes.FETCH_OPEN_WORKORDER,
          payload: workorder 
     }
     

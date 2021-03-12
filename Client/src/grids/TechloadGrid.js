@@ -20,7 +20,7 @@ class Techload extends Component {
        render() {
         return (
             <React.Fragment>   
-            <div style={{height: 230, width: '100%'}} className="ag-theme-fresh">
+            <div style={{height: 180, width: '100%'}} className="ag-theme-fresh">
                 <hr/>   
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                   rowSelection="single"

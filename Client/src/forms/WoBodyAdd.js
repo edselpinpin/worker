@@ -31,7 +31,7 @@ class WoformAdd extends Component {
                 brand:  '',
                 inst: '',
                 promised_date: '',
-                selectedDay: new Date().toISOString().slice(0,10),
+                selectedDay: new Date().toLocaleDateString('en-US').slice(0,10),
                 isEmpty: true,
                 isDisabled: false,
               

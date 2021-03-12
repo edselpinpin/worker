@@ -27,6 +27,7 @@ export const ConfigureStore = () => {
             workorderdtl: WorkOrderDtlReducer,
             workoderparts: WorkOrderPartsReducer,
             custworkorder: WorkOrderReducer,
+            worderopen:  WorkOrderReducer,
             sys_settings: Sys_settingsReducer,
             ...createForms({
                 customerForm: InitialCustommer

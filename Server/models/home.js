@@ -30,6 +30,22 @@ const getWorkordersdue = () => {
       })
     }) 
   }
+
+  const getOpenWorkorders = () => {
+    return new Promise(function(resolve, reject) {
+      pool.query(`select * from worder INNER JOIN customer ON worder.custid = customer.custid 
+                  LEFT JOIN technicians ON technicians.techid = worder.techid 
+                  where worder.status = 'Open' or 
+                  worder.status       = 'Complete' AND 
+                  worder.promised_date >= CURRENT_DATE`, (error, results) => {
+        if (error) {
+          reject(error)
+        }
+       
+        resolve(results.rows);
+      })
+    }) 
+  }
   
   const getWorkorderCust = (custid) => {
     const value = parseInt(custid)
@@ -60,6 +76,7 @@ const getWorkordersdue = () => {
   module.exports = {
     getWorkordersdue,
     getWorkorderstoday,
+    getOpenWorkorders,
     getWorkorderCust,
     gettechload,
   }

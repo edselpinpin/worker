@@ -1,7 +1,7 @@
 import Header from './HeaderComp';
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import { fetchCustomer, fetchService, fetchTech, fetchWorkorder, fetchdDueWorkorder, fetchdTodayWorkorder, fetchSysSettings} from '../actions/ActionCreators';
+import { fetchCustomer, fetchService, fetchTech, fetchWorkorder, fetchdDueWorkorder, fetchdTodayWorkorder, fetchdOpenWorkorder, fetchSysSettings} from '../actions/ActionCreators';
 import { connect } from "react-redux";
 import Home from './HomeComp';
 import Workorder from './WorkorderComp';
@@ -17,6 +17,7 @@ const mapStateToProps = state => {
       service: state.service,
       tech: state.tech,
       sys_settings: state.sys_settings
+
   };
 };
 
@@ -28,6 +29,7 @@ const mapDispatchToProps = {
   fetchWorkorder:() => (fetchWorkorder()),
   fetchdDueWorkorder:() => (fetchdDueWorkorder()),
   fetchdTodayWorkorder: () => (fetchdTodayWorkorder()),
+  fetchdOpenWorkorder: () => (fetchdOpenWorkorder()),
  
   
 }
@@ -43,6 +45,7 @@ componentDidMount(){
   this.props.fetchWorkorder();
   this.props.fetchdDueWorkorder();
   this.props.fetchdTodayWorkorder();
+  this.props.fetchdOpenWorkorder();
  
  
 }

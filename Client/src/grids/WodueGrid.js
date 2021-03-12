@@ -15,6 +15,7 @@ class Wodue extends Component {
                     cellRenderer: (data) => {
                      return data.value ? (new Date(data.value)).toDateString() : '';
                      }},
+                   {headerName: 'Status', field: 'status', maxWidth: 200, sortable: true, filter:true}, 
                   
                    {headerName: 'First Name', field: 'cust_firstname', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Last Name', field: 'cust_lastname', maxWidth: 150, sortable: true, filter:true},
@@ -28,7 +29,7 @@ class Wodue extends Component {
        render() {
         return (
             <React.Fragment>   
-            <div style={{height: 230, width: '100%'}} className="ag-theme-fresh">
+            <div style={{height: 180, width: '100%'}} className="ag-theme-fresh">
                 <hr/>   
                     <AgGridReact columnDefs={this.state.columnDefs} 
                                   rowSelection="single"

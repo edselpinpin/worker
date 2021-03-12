@@ -11,7 +11,11 @@ class Wogrid extends Component {
            this.state = {
                columnDefs:[
                    {headerName: 'WO #', field: 'worderid', maxWidth: 100, sortable: true, filter:true},
-                   {headerName: 'Promised Date', field: 'promised_date', maxWidth: 150, sortable: true, filter:true},
+                   {headerName: 'Promised Date', field: 'promised_date', 
+                    cellRenderer: (data) => {
+                     return data.value ? (new Date(data.value)).toDateString() : '';
+                     }},
+                   {headerName: 'Status', field: 'status', maxWidth: 200, sortable: true, filter:true},
                    {headerName: 'Brand', field: 'brand', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Model', field: 'model', maxWidth: 150, sortable: true, filter:true},
                    {headerName: 'Amount', field: 'amount'},

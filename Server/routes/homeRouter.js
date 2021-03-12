@@ -22,6 +22,16 @@ const home = express();
     })
   })
 
+  home.get('/workorderopen', (req, res) => {
+    db_model.getOpenWorkorders()
+    .then(response => {
+      res.status(200).send(response);
+    })
+    .catch(error => {
+      res.status(500).send(error);
+    })
+  })
+
   home.get('/workordercust/:custid', (req, res) => {
     db_model.getWorkorderCust(req.params.custid)
     .then(response => {
